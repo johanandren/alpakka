@@ -5,15 +5,14 @@
 package jms
 
 // #sample
-import javax.jms
-
+import akka.Done
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
 import akka.http.scaladsl.model.ws.{WebSocketRequest, WebSocketUpgradeResponse}
+import akka.stream.KillSwitch
 import akka.stream.alpakka.jms.JmsSourceSettings
 import akka.stream.alpakka.jms.scaladsl.JmsSource
 import akka.stream.scaladsl.{Flow, Keep, Sink, Source}
-import akka.{Done, NotUsed}
 import playground.{ActiveMqBroker, WebServer}
 
 import scala.collection.immutable.Seq
@@ -43,7 +42,7 @@ object JmsToWebSocket extends JmsSampleBase with App {
   // format: off
   // #sample
 
-  val jmsSource: Source[String, NotUsed] =
+  val jmsSource: Source[String, KillSwitch] =
     JmsSource.textSource(                                                             // (1)
       JmsSourceSettings(connectionFactory).withBufferSize(10).withQueue("test")
     )

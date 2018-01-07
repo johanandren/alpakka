@@ -5,13 +5,14 @@
 package jms
 
 // #sample
+import akka.Done
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
+import akka.stream.KillSwitch
 import akka.stream.alpakka.jms.JmsSourceSettings
 import akka.stream.alpakka.jms.scaladsl.JmsSource
 import akka.stream.scaladsl.{Sink, Source}
 import akka.util.ByteString
-import akka.{Done, NotUsed}
 import playground.{ActiveMqBroker, WebServer}
 
 import scala.concurrent.Future
@@ -28,7 +29,7 @@ object JmsToHttpGet extends JmsSampleBase with App {
 
   // format: off
   // #sample
-  val jmsSource: Source[String, NotUsed] =                                // (1)
+  val jmsSource: Source[String, KillSwitch] =                                // (1)
     JmsSource.textSource(
       JmsSourceSettings(connectionFactory).withBufferSize(10).withQueue("test")
     )

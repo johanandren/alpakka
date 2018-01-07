@@ -7,11 +7,10 @@ package jms
 // #sample
 import java.nio.file.Paths
 
-import akka.NotUsed
-import akka.stream.IOResult
 import akka.stream.alpakka.jms.JmsSourceSettings
 import akka.stream.alpakka.jms.scaladsl.JmsSource
 import akka.stream.scaladsl.{FileIO, Sink, Source}
+import akka.stream.{IOResult, KillSwitch}
 import akka.util.ByteString
 import playground.ActiveMqBroker
 
@@ -28,7 +27,7 @@ object JmsToFile extends JmsSampleBase with App {
   // format: off
   // #sample
 
-  val jmsSource: Source[String, NotUsed] =           // (1)
+  val jmsSource: Source[String, KillSwitch] =           // (1)
     JmsSource.textSource(
       JmsSourceSettings(connectionFactory).withBufferSize(10).withQueue("test")
     )
